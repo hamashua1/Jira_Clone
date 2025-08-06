@@ -8,3 +8,5 @@ const userSchema = new mongoose.Schema({
 })
 
 const userModel =  new mongoose.Model('user',userSchema)
+
+export default userModel
