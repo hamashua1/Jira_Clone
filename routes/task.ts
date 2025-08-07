@@ -21,7 +21,7 @@ router.get('/api/task', async (req: Request,res: Response)=>{
 router.get('/api/task/:id', async(req:Request,res:Response)=>{
         try{
           const{id:string} = req.params
-          const results:number= await taskModel.findById({id:string})
+          const results:string= await taskModel.findById({id:string})
           res.status(200).json({message:'specific task found', results})
      }catch(Error){
     throw new Error(`value returned is not an id`)
