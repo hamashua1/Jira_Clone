@@ -57,14 +57,14 @@ Tasks /tasks
 -> Delete task DELETE /:id ===========> DELETE_TASKS
 -> Assign task POST /:id ===========> ASSIGN_TASKS
 
-User Models (Schema)
+User Models (Schema) ✅
 -  id
 -  email
 -  name
 -  password
 -  permissions
 
-Task
+Task ✅
 - id
 - title
 - deadline
