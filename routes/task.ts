@@ -1,4 +1,4 @@
-import express, { response } from 'express'
+import express from 'express'
 import  {Request,Response} from 'express'
 import taskModel from '../models/task'
 const router = express.Router()
