@@ -5,10 +5,10 @@ const taskSchema = new mongoose.Schema({
        title:{type:String},
        deadline:{type:String},
        description:{type:String},
-       assignedID:{type:Number},
+       assignedId:{type:Number},
        status:{type:String}
 })
 
-const taskModel = new mongoose.Model('task', taskSchema)
+const taskModel = mongoose.model('task', taskSchema)
 
 export default taskModel
