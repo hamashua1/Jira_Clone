@@ -9,6 +9,9 @@ app.use(express.json())
 app.use(taskRoutes)
 const PORT:number = 8000
 connectDB()
+
+
+
 app.listen(PORT,()=>{
     console.log(`app is flying 🚀 20,000 feet on port ${PORT}`)
 })
