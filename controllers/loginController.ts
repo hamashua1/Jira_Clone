@@ -2,6 +2,9 @@ import express from 'express'
 import userModel from '../models/user.ts'
 import type{Request,Response} from 'express'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import 'dotenv/config'
+
 
 // admin panel only can use this endpoint
 export const adminRegister = async(req:Request, res:Response)=>{
@@ -39,15 +42,22 @@ export const sign_in = async(req:Request,res:Response)=>{
     try{
           const {email,password} = req.body
           const results = await userModel.findOne({email})
-          if(!email){
-            console.error('email not found in database')
+          if(!results){
+            return console.error('email not found in database')   
           }
           const isPasswordRight = await bcrypt.compare(password,results.password)
           if(!isPasswordRight){
-            console.error('password not found in database')
+            return console.error('password not found in database')
           }
+           if(!process.env.JWT_SECRET){
+            throw new Error("environment viarables not found")
+          }
+          const token = jwt.sign({id:results._id},process.env.JWT_SECRET,{expiresIn:'30m'})
+         
           res.status(201).json({message:"sign in successful", results,isPasswordRight} )
     }catch(err){
           res.status(401).json({message: 'sign in failed'})
     }
 }
+
+
