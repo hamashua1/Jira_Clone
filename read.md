@@ -40,8 +40,8 @@ Permissions = [
 ]
 
 Authentication /auth
--> Register user [Creating a user] POST /sign-up
--> Sign in user -> POST /sign-in
+-> Register user [Creating a user] POST /sign-up ✅
+-> Sign in user -> POST /sign-in ✅
 
 User management /users
 -> View users GET =====> READ_USERS
@@ -49,7 +49,7 @@ User management /users
 -> Update user PATCH /:id =======> UPDATE_USERS
 -> Create user ============> CREATE_USERS
 
-Tasks /tasks
+Tasks /tasks ✅
 -> View All tasks GET ======> READ_TASKS
 -> View one task by id GET /:id ========> READ_TASKS
 -> Create tasks POST ==========> CREATE_TASKS
