@@ -27,7 +27,6 @@ interface MyJwtPayload extends JwtPayload {
 
 export const allTask = async (req: Request, res: Response) => {
     try {
-
        const results = await taskModel.find()
         res.status(200).json({ message: 'all tasks returned successfuly', results })
     } catch (err) {
@@ -50,6 +49,8 @@ export const findTask = async (req: Request, res: Response) => {
 export const addTask = async (req: Request, res: Response) => {
          try{
          const { title, deadline, description, assignedId, status }: Task = req.body
+
+         // checking for authorized users
           if(!process.env.JWT_SECRET){
             throw new Error("environment viarables not found")
           }
@@ -91,6 +92,23 @@ export const updateTask = async (req: Request, res: Response) => {
 export const removeTask = async (req: Request, res: Response) => {
     try {
         const {id} = req.params
+        // checking for authorized users
+          if(!process.env.JWT_SECRET){
+            throw new Error("environment viarables not found")
+          }
+        const token = req.cookies.token as string
+        if(!token){
+            return res.status(404).json({message:'not authorized'})
+        }
+    
+        const verify= jwt.verify(token,process.env.JWT_SECRET) as MyJwtPayload
+        const pass = await userModel.findById(verify._id)
+        if(!pass){
+            throw new Error('token expired')
+        }
+        if(verify.role !== 'admin'){
+            throw new Error ('not authrorized for this endpoint')
+        }
         const results = await taskModel.findByIdAndDelete(id)
         res.status(200).json({ message: 'sucessfully deleted', results })
     } catch (err) {
