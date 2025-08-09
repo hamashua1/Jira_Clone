@@ -59,8 +59,8 @@ export const addTask = async (req: Request, res: Response) => {
         }
 
         const verify = jwt.verify(token, process.env.JWT_SECRET) as MyJwtPayload
-        const pass = await userModel.findById(verify._id)
-        if (!pass) {
+        const userDocs = await userModel.findById(verify._id)
+        if (!userDocs) {
             throw new Error('token expired')
         }
         if (verify.role !== 'admin') {
