@@ -48,8 +48,7 @@ export const findTask = async (req: Request, res: Response) => {
 
 export const addTask = async (req: Request, res: Response) => {
     try {
-        const { title, deadline, description, assignedId, status }: Task = req.body
-
+        
         // checking for authorized users
         if (!process.env.JWT_SECRET) {
             throw new Error("environment viarables not found")
@@ -68,7 +67,7 @@ export const addTask = async (req: Request, res: Response) => {
             throw new Error('not authrorized for this endpoint')
         }
 
-        const results = new taskModel({ title, deadline, description, assignedId, status })
+        const results = new taskModel(req.body)
         await results.save()
         res.status(200).json({ message: 'tasks added successfully to database', results })
     } catch (err) {
