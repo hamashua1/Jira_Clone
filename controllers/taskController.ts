@@ -1,9 +1,14 @@
 import taskModel from "../models/task.ts"
-import type { Request, Response } from "express"
+import jwt from 'jsonwebtoken'
+import type { JwtPayload } from 'jsonwebtoken'
+import type {Request , Response} from "express"
+import 'dotenv/config'
+import userModel from "../models/user.ts"
+import cookieParser from "cookie-parser"
 
 
 
-export type Task = {
+export interface Task{
     title: string,
     deadline: string,
     description: string,
@@ -12,8 +17,17 @@ export type Task = {
 }
 
 
+interface MyJwtPayload extends JwtPayload {
+    _id: string,
+    role: 'admin' | 'user'
+}
+
+
+
+
 export const allTask = async (req: Request, res: Response) => {
     try {
+
        const results = await taskModel.find()
         res.status(200).json({ message: 'all tasks returned successfuly', results })
     } catch (err) {
@@ -34,8 +48,25 @@ export const findTask = async (req: Request, res: Response) => {
 }
 
 export const addTask = async (req: Request, res: Response) => {
-    try {
-        const { title, deadline, description, assignedId, status }: Task = req.body
+         try{
+         const { title, deadline, description, assignedId, status }: Task = req.body
+          if(!process.env.JWT_SECRET){
+            throw new Error("environment viarables not found")
+          }
+        const token = req.cookies.token as string
+        if(!token){
+            return res.status(404).json({message:'not authorized'})
+        }
+    
+        const verify= jwt.verify(token,process.env.JWT_SECRET) as MyJwtPayload
+        const pass = await userModel.findById(verify._id)
+        if(!pass){
+            throw new Error('token expired')
+        }
+        if(verify.role !== 'admin'){
+            throw new Error ('not authrorized for this endpoint')
+        }
+    
         const results = new taskModel({ title, deadline, description, assignedId, status })
         await results.save()
         res.status(200).json({ message: 'tasks added successfully to database', results })
@@ -44,6 +75,7 @@ export const addTask = async (req: Request, res: Response) => {
         res.status(404).json({ message: 'couldnt add to database' })
     }
 }
+
 
 export const updateTask = async (req: Request, res: Response) => {
     try {
@@ -66,3 +98,4 @@ export const removeTask = async (req: Request, res: Response) => {
         res.status(401).json({ message: 'could not delete task' })
     }
 }
+

@@ -31,7 +31,7 @@ Permissions = [
     CREATE_USERS,
     UPDATE_USERS,
     DELETE_USERS,
-    // Tasks
+    // Tasks ✅
     READ_TASKS,
     CREATE_TASKS,
     UPDATE_TASKS,
