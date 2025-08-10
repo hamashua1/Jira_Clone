@@ -7,12 +7,17 @@ import 'dotenv/config'
 import cookieParser from 'cookie-parser'
 
 
-
+interface loginRequest {
+  name: string,
+  email: string,
+  password: string
+  role: string
+}
 
 // admin panel only can use this endpoint
 export const adminRegister = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, role } = req.body
+    const { name, email, password, role }: loginRequest = req.body
     const saltRounds: number = 10
     const hashPassword = await bcrypt.hash(password, saltRounds)
     const results = new userModel({ name, email, password: hashPassword, role })
@@ -57,7 +62,7 @@ export const userRegister = async (req: Request, res: Response) => {
   try {
 
     // at the role: user
-    const { name, email, password, role } = req.body
+    const { name, email, password, role }: loginRequest = req.body
     const saltRounds: number = 10
     const hashPassword = await bcrypt.hash(password, saltRounds)
     const results = new userModel({ name, email, password: hashPassword, role })
