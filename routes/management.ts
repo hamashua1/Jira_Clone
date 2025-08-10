@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import {readUser , readSpecificUser, updateUser} from '../controllers/managementController'
+import {readUser , readSpecificUser, updateUser} from '../controllers/managementController.ts'
 
 
 // user endpoints
