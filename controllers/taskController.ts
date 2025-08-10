@@ -37,8 +37,8 @@ export const allTask = async (req: Request, res: Response) => {
 
 export const findTask = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        const results = await taskModel.findById(id)
+      
+        const results = await taskModel.findById(req.params.id)
         res.status(200).json({ message: 'specific task found', results })
     } catch (err) {
         console.error(err)
