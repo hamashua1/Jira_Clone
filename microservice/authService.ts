@@ -3,7 +3,7 @@ import type { JwtPayload } from 'jsonwebtoken'
 import type { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
-import userModel from "../models/user"
+import userModel from "../models/user.ts"
 
 
 
