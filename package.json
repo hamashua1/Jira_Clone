@@ -2,13 +2,13 @@
   "name": "company-management-app",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/hamashua1/Company-Management-App#readme",
+  "homepage": "https://github.com/hamashua1/Jira_Clone#readme",
   "bugs": {
-    "url": "https://github.com/hamashua1/Company-Management-App/issues"
+    "url": "https://github.com/hamashua1/Jira_Clone/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hamashua1/Company-Management-App.git"
+    "url": "git+https://github.com/hamashua1/Jira_Clone.git"
   },
   "license": "ISC",
   "author": "joshua nun",
