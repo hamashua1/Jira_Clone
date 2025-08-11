@@ -67,7 +67,7 @@ export const userRegister = async (req: Request, res: Response) => {
     const hashPassword = await bcrypt.hash(password, saltRounds)
     const results = new userModel({ name, email, password: hashPassword, role })
     await results.save()
-    res.status(201).json({ messgae: 'credentials saved succeesfully' })
+    res.status(201).json({ messgae: 'credentials saved succeesfully', results})
   } catch (err) {
     console.error(err)
     res.status(401).json({ message: "credentials not saved " })
