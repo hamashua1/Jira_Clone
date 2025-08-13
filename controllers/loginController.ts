@@ -22,7 +22,7 @@ export const adminRegister = async (req: Request, res: Response) => {
     const hashPassword = await bcrypt.hash(password, saltRounds)
     const results = new userModel({ name, email, password: hashPassword, role })
     await results.save()
-    res.status(201).json({ messgae: 'credentials saved succeesfully' })
+    res.status(201).json({ messgae: 'credentials saved succeesfully', results })
   } catch (err) {
     console.error(err)
     res.status(401).json({ message: "credentials not saved " })
@@ -46,7 +46,7 @@ export const adminSignin = async (req: Request, res: Response) => {
       throw new Error("environment viarables not found")
     }
     const token = jwt.sign({ id: results._id, role: results.role }, process.env.JWT_SECRET, { expiresIn: '30m' })
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 30 * 30 * 500 })
+    res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 30 * 30 * 500 })
 
     res.status(201).json({ message: "sign in successful", results, isPasswordRight })
   } catch (err) {
@@ -61,7 +61,7 @@ export const adminSignin = async (req: Request, res: Response) => {
 export const userRegister = async (req: Request, res: Response) => {
   try {
 
-    // at the role: user
+    
     const { name, email, password, role }: loginRequest = req.body
     const saltRounds: number = 10
     const hashPassword = await bcrypt.hash(password, saltRounds)

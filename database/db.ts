@@ -9,3 +9,8 @@ export const connectDB = async()=>{
     await mongoose.connect(uri)
     console.log('Database is now in the cloud ☁️')
 }
+
+
+
+  
+
