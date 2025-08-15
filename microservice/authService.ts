@@ -17,7 +17,7 @@ export const authenticateToken = async (req: Request, res: Response, next) => {
     if (!process.env.JWT_SECRET) {
         throw new Error("environment viarables not found")
     }
-    console.log("req.cookies",req.cookies)
+
     const token = req.cookies?.token
     if(!token){
         throw new Error('token not found')
@@ -33,22 +33,25 @@ export const authenticateToken = async (req: Request, res: Response, next) => {
 
 
 
-export const authenticateRole = async (req: Request, res: Response, next) => {
+export const authenticateRole = async (req: Request, res: Response, next:any) => {
+    try{
     if (!process.env.JWT_SECRET) {
-        throw new Error("environment viarables not found")
+        throw next(new Error("environment viarables not found"))
     }
-    const token = req.cookies.token
+    const token = req.cookies?.token
     if(!token){
-        throw new Error('token not found')
+        throw next(new Error('token not found'))
     }
     const verify = jwt.verify(token, process.env.JWT_SECRET) as MyJwtPayload
     const userDocs = await userModel.findById(verify.id)
     if (!userDocs) {
-        throw new Error('token is invaid')
+        throw (new Error('token is invaid'))
     }
-    if (verify.role !== 'admin') {
-        throw new Error('user is not authorized')
+    if (userDocs.role !== 'admin') {
+        throw next(new Error('user is not authorized'))
     }
-    next()
+    }catch(err){
+    next(err)
+    }
 
 }

@@ -4,7 +4,7 @@ import type { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
-import cookieParser from 'cookie-parser'
+
 
 
 interface loginRequest {
@@ -98,5 +98,14 @@ export const sign_in = async (req: Request, res: Response) => {
     res.status(401).json({ message: 'sign in failed' })
   }
 }
+
+
+
+
+
+
+
+
+
 
 
