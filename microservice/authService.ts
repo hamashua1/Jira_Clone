@@ -51,7 +51,8 @@ export const authenticateRole = async (req: Request, res: Response, next:any) =>
         throw next(new Error('user is not authorized'))
     }
     }catch(err){
-    next(err)
+   console.error(err)
     }
-
+     next()
 }
+
