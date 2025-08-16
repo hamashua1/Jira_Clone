@@ -1,7 +1,7 @@
 import express from 'express'
 const router = express.Router()
 import {readUser , readSpecificUser, updateUser} from '../controllers/managementController.ts'
-import { authenticateToken } from '../microservice/authService.ts'
+import { authenticateToken } from '../services/authService.ts'
 
 
 // user endpoints
