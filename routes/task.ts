@@ -1,8 +1,8 @@
 import express, { Router } from 'express'
 import {addTask, allTask, findTask , removeTask, updateTask} from '../controllers/taskController.ts'
-const router = express.Router()
 import { authenticateRole } from '../services/authService.ts'
 import { authenticateToken } from '../services/authService.ts'
+const router = express.Router()
 
 
 //endpoints for tasks
