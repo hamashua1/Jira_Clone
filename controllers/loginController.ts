@@ -17,10 +17,10 @@ interface loginRequest {
 // admin panel only can use this endpoint
 export const adminRegister = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, role }: loginRequest = req.body
+    const { name, email, password }: loginRequest = req.body
     const saltRounds: number = 10
     const hashPassword = await bcrypt.hash(password, saltRounds)
-    const results = new userModel({ name, email, password: hashPassword, role })
+    const results = new userModel({ name, email, password: hashPassword, role: 'admin' })
     await results.save()
     res.status(201).json({ messgae: 'credentials saved succeesfully', results })
   } catch (err) {
@@ -60,12 +60,10 @@ export const adminSignin = async (req: Request, res: Response) => {
 // admin panel to create a user endpoint
 export const userRegister = async (req: Request, res: Response) => {
   try {
-
-    
-    const { name, email, password, role }: loginRequest = req.body
+    const { name, email, password }: loginRequest = req.body
     const saltRounds: number = 10
     const hashPassword = await bcrypt.hash(password, saltRounds)
-    const results = new userModel({ name, email, password: hashPassword, role })
+    const results = new userModel({ name, email, password: hashPassword, role: 'user' })
     await results.save()
     res.status(201).json({ messgae: 'credentials saved succeesfully', results})
   } catch (err) {

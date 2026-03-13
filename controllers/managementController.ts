@@ -25,7 +25,8 @@ export const readSpecificUser = async (req:Request,res:Response)=>{
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const {id} = req.params
-        const updates= req.body
+        const { name, email, password } = req.body
+        const updates = { name, email, password }
         const results = await userModel.findByIdAndUpdate(id, updates, {new: true, runValidators: true })
         res.status(200).json({ message: 'filed has successfully updated in database', results })
     } catch (err) {
