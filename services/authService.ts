@@ -33,26 +33,27 @@ export const authenticateToken = async (req: Request, res: Response, next) => {
 
 
 
-export const authenticateRole = async (req: Request, res: Response, next:any) => {
-    try{
-    if (!process.env.JWT_SECRET) {
-        throw new Error("environment viarables not found")
+export const authenticateRole = async (req: Request, res: Response, next: any) => {
+    try {
+        if (!process.env.JWT_SECRET) {
+            throw new Error("environment variables not found")
+        }
+        const token = req.cookies?.token
+        if (!token) {
+            return res.status(401).json({ message: 'token not found' })
+        }
+        const verify = jwt.verify(token, process.env.JWT_SECRET) as MyJwtPayload
+        const userDocs = await userModel.findById(verify.id)
+        if (!userDocs) {
+            return res.status(401).json({ message: 'token is invalid' })
+        }
+        if (userDocs.role !== 'admin') {
+            return res.status(403).json({ message: 'access denied: admins only' })
+        }
+        next()
+    } catch (err) {
+        console.error(err)
+        res.status(401).json({ message: 'authentication failed' })
     }
-    const token = req.cookies?.token
-    if(!token){
-        throw next(new Error('token not found'))
-    }
-    const verify = jwt.verify(token, process.env.JWT_SECRET) as MyJwtPayload
-    const userDocs = await userModel.findById(verify.id)
-    if (!userDocs) {
-        throw new Error('token is invaid')
-    }
-    if (userDocs.role !== 'admin') {
-        throw new Error('user is not authorized')
-    }
-    }catch(err){
-   console.error(err)
-    }
-     next()
 }
 
