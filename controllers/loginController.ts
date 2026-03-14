@@ -22,33 +22,37 @@ export const adminRegister = async (req: Request, res: Response) => {
     const hashPassword = await bcrypt.hash(password, saltRounds)
     const results = new userModel({ name, email, password: hashPassword, role: 'admin' })
     await results.save()
-    res.status(201).json({ messgae: 'credentials saved succeesfully', results })
+    const { password: _, ...safeUser } = results.toObject()
+    res.status(201).json({ message: 'credentials saved successfully', user: safeUser })
   } catch (err) {
     console.error(err)
-    res.status(401).json({ message: "credentials not saved " })
+    res.status(500).json({ message: "credentials not saved" })
   }
 }
 
 
-//admin sign in 
+//admin sign in
 export const adminSignin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ message: 'invalid input' })
+    }
     const results = await userModel.findOne({ email })
     if (!results) {
-      return console.error('email not found in database')
+      return res.status(401).json({ message: 'invalid email or password' })
     }
     const isPasswordRight = await bcrypt.compare(password, results.password)
     if (!isPasswordRight) {
-      return console.error('password not found in database')
+      return res.status(401).json({ message: 'invalid email or password' })
     }
     if (!process.env.JWT_SECRET) {
-      throw new Error("environment viarables not found")
+      throw new Error("environment variables not found")
     }
     const token = jwt.sign({ id: results._id, role: results.role }, process.env.JWT_SECRET, { expiresIn: '30m' })
-    res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 30 * 30 * 500 })
-
-    res.status(201).json({ message: "sign in successful", results, isPasswordRight })
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 30 * 60 * 1000 })
+    const { password: _, ...safeUser } = results.toObject()
+    res.status(200).json({ message: "sign in successful", user: safeUser })
   } catch (err) {
     res.status(401).json({ message: 'sign in failed' })
   }
@@ -65,33 +69,37 @@ export const userRegister = async (req: Request, res: Response) => {
     const hashPassword = await bcrypt.hash(password, saltRounds)
     const results = new userModel({ name, email, password: hashPassword, role: 'user' })
     await results.save()
-    res.status(201).json({ messgae: 'credentials saved succeesfully', results})
+    const { password: _, ...safeUser } = results.toObject()
+    res.status(201).json({ message: 'credentials saved successfully', user: safeUser })
   } catch (err) {
     console.error(err)
-    res.status(401).json({ message: "credentials not saved " })
+    res.status(500).json({ message: "credentials not saved" })
   }
 }
 
-// users login panel 
+// users login panel
 
 export const sign_in = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ message: 'invalid input' })
+    }
     const results = await userModel.findOne({ email })
     if (!results) {
-      return console.error('email not found in database')
+      return res.status(401).json({ message: 'invalid email or password' })
     }
     const isPasswordRight = await bcrypt.compare(password, results.password)
     if (!isPasswordRight) {
-      return console.error('password not found in database')
+      return res.status(401).json({ message: 'invalid email or password' })
     }
     if (!process.env.JWT_SECRET) {
-      throw new Error("environment viarables not found")
+      throw new Error("environment variables not found")
     }
     const token = jwt.sign({ id: results._id, role: results.role }, process.env.JWT_SECRET, { expiresIn: '30m' })
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 30 * 30 * 500 })
-
-    res.status(201).json({ message: "sign in successful", results, isPasswordRight })
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 30 * 60 * 1000 })
+    const { password: _, ...safeUser } = results.toObject()
+    res.status(200).json({ message: "sign in successful", user: safeUser })
   } catch (err) {
     res.status(401).json({ message: 'sign in failed' })
   }

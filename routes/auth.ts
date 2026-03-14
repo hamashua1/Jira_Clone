@@ -6,7 +6,7 @@ import { authenticateRole } from '../services/authService.ts'
 router.post('/api/task/register', authenticateRole, adminRegister)
 router.post('/api/task/sign_in', sign_in)
 router.post('/api/adminSignin', adminSignin)
-router.post('/api/task/userRegister', userRegister)
+router.post('/api/task/userRegister', authenticateRole, userRegister)
 
 
 export default router
